@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,53 +22,50 @@ public class ScoreEntry extends AppCompatActivity {
         setContentView(R.layout.activity_score_entry);
 
     }
-    public void onAddCourse(View v){
-        AlertDialog.Builder builder =new AlertDialog.Builder(this);
-        builder.setTitle("Add Course");
-        builder.setMessage("Enter course name, credits and grade points for the course");
-        builder.setView(R.layout.course_details_row);
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //validate the edittexts
-                EditText courseNameWidget = (EditText) findViewById(R.id.courseName);
-                EditText courseCreditsWidget = (EditText) findViewById(R.id.credits);
-                EditText gradeWidget = (EditText) findViewById(R.id.GradePoints);
-                String courseName = courseNameWidget.getText().toString().trim();
-                int credits = Integer.parseInt(courseCreditsWidget.getText().toString().trim());
-                int grade = Integer.parseInt(gradeWidget.getText().toString().trim());
-                // if valid add to the screen
-                boolean flag = true;
-                if(credits >= 1 && credits <=4 && grade >= 5 && grade <=10 && !courseName.equals("")){
-                    // add to layout of score entry;
-                    LinearLayout existing = findViewById(R.id.courseDetails);
-                    LinearLayout staticRow = new LinearLayout(getApplicationContext());
-                    TextView cname = new TextView(getApplicationContext());
-                    cname.setText(courseName);
-                    TextView credit = new TextView(getApplicationContext());
-                    credit.setText(credits);
-                    TextView gradeWid = new TextView(getApplicationContext());
-                    gradeWid.setText(grade);
-                    ImageView imgicon = new ImageView(getApplicationContext());
-                    imgicon.setImageResource(R.drawable.ic_outline_delete_24);
-                    staticRow.addView(cname);
-                    staticRow.addView(credit);
-                    staticRow.addView(gradeWid);
-                    staticRow.addView(imgicon);
-                    existing.addView(staticRow);
-                }else{
-                    flag = false;
-                }
 
-                // if invalid
-                if(flag == false){
-                    // toast
-                    Toast.makeText(getApplicationContext(), "INVALID DATA",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+    public void onCalculateSGPA(View v) {
+        Toast.makeText(this, "will calci later", Toast.LENGTH_LONG).show();
     }
-    public void onCalculateSGPA(View v){
-        Toast.makeText(this, "will calci later",Toast.LENGTH_LONG).show();
+
+    public void onAddCourse(View v) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.course_details_row, null);
+        final EditText courseName = alertLayout.findViewById(R.id.courseName);
+        final EditText credits = alertLayout.findViewById(R.id.credits);
+        final EditText grades=alertLayout.findViewById(R.id.GradePoints);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Grade Entry");
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+        alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show());
+
+        alert.setPositiveButton("Submit", (dialog, which) -> {
+            String course_name = courseName.getText().toString();
+            int credit = Integer.parseInt(credits.getText().toString());
+            int grade=Integer.parseInt(grades.getText().toString());
+            boolean flag=true;
+            if(credit >= 1 && credit <=4 && grade >= 5 && grade <=10 && !course_name.equals("")){
+                  View static_details=inflater.inflate(R.layout.static_course_details,null);
+                  TextView c_nameWid= (TextView) static_details.findViewById(R.id.cName);
+                  TextView cr_nameWid=(TextView) static_details.findViewById(R.id.crName);
+                  TextView gpointWid=(TextView) static_details.findViewById(R.id.gPoint);
+                  c_nameWid.setText(course_name);
+                  cr_nameWid.setText(Integer.toString(credit));
+                  gpointWid.setText(Integer.toString(grade));
+                  LinearLayout score_entry=(LinearLayout) findViewById(R.id.courseDetails);
+                  score_entry.addView(static_details);
+            }else{
+                flag = false;
+            }
+
+            // if invalid
+            if(flag == false){
+                // toast
+                Toast.makeText(ScoreEntry.this, "INVALID DATA",Toast.LENGTH_LONG).show();
+            }
+
+    });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 }
