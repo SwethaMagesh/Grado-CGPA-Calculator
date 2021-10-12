@@ -63,6 +63,7 @@ public class ScoreEntry extends AppCompatActivity {
             System.out.println(scoreDetailsFromFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            scoreDetailsFromFile = new HashMap<>();
         }
     }
 
