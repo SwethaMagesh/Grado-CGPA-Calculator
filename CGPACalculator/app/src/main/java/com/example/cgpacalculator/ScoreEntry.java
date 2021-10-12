@@ -1,38 +1,23 @@
 package com.example.cgpacalculator;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.HttpAuthHandler;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import org.json.JSONException;
+import org.json.simple.JSONValue;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.nio.file.StandardOpenOption;
-import java.util.Base64;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,25 +35,17 @@ public class ScoreEntry extends AppCompatActivity {
         @Override
         public String toString(){
             String str="";
-            str="Course Name:"+courseName+",Credits:"+credits+",Grade Points:"+gpoints;
+            str="Course Name: "+courseName+", Credits: "+credits+", Grade Points: "+gpoints;
             return str;
         }
     }
-    public class SemesterObject{
-        float sgpa;
-        float cgpa;
-        HashMap<Integer, CourseObject> courseDetailsPerSemester;
 
-        SemesterObject(float sg,float cg,HashMap<Integer,CourseObject>crDetails){
-            sgpa=sg;
-            cgpa=cg;
-            courseDetailsPerSemester=crDetails;
-        }
-    }
     int courseCount = 0;
     HashMap<Integer, CourseObject> courseDetailsPerSemester;
+    HashMap<String, HashMap<String, Float>> scoreDetailsFromFile;
     int currentSemNumber;
     float sgpa;
+    HashMap<String, Float> thisSemester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +53,24 @@ public class ScoreEntry extends AppCompatActivity {
         setContentView(R.layout.activity_score_entry);
         courseDetailsPerSemester = new HashMap<Integer, CourseObject>();
         currentSemNumber = Integer.parseInt(getIntent().getExtras().getString("Semester"));
-        System.out.println("Current Sem "+currentSemNumber);
+        TextView header = (TextView) findViewById(R.id.textView2);
+        header.setText("Semester "+currentSemNumber);
+        thisSemester = new HashMap<>();
+        InputStream fd = null;
+        try {
+            fd = openFileInput("scoreDetails.json");
+            scoreDetailsFromFile = DataHandling.fileToHashMap(fd);
+            System.out.println(scoreDetailsFromFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void onCalculateSGPA(View v) throws JSONException {
+    public void onCalculateSGPA(View v) {
+        if(courseCount==0){
+            Toast.makeText(this, "Please enter at least one course",Toast.LENGTH_LONG).show();
+            return;
+        }
         int totalCreditsThisSem  = 0;
         int totalCreditsObtained = 0;
         // calculate sgpa from the given data
@@ -90,9 +81,17 @@ public class ScoreEntry extends AppCompatActivity {
             totalCreditsThisSem  += value.credits * 10;
             System.out.println("Till course "+value.courseName+" "+totalCreditsObtained);
         }
-        sgpa = totalCreditsObtained/(totalCreditsThisSem*1.0f);
-        System.out.println("SGPA for semester "+currentSemNumber);
+
+        sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0f);
+        System.out.println("SGPA for semester "+currentSemNumber+" "+sgpa);
+        thisSemester.put("CGPA",0.0f);
+        thisSemester.put("SGPA",sgpa);
+        thisSemester.put("Credits",totalCreditsThisSem*1.0f);
         this.storeDetailsOfThisSem();
+        // move to next screen
+        Intent intent = new Intent(this, DisplaySGPA.class);
+        intent.putExtra("Semester",currentSemNumber);
+        startActivity(intent);
 
     }
 
@@ -144,58 +143,30 @@ public class ScoreEntry extends AppCompatActivity {
         dialog.show();
     }
 
-    public void storeDetailsOfThisSem() throws JSONException {
+    public void storeDetailsOfThisSem() {
         System.out.println("Saving the details and sgpa");
-        // save semester num : spga, courseDetailsPerSemester
-        /*
 
-        Sem No:
-        {
-        sgpa:
-        cgpa:
-        courses:[
-        1: courseObject,
-        2: courseObject
-        ]
-        }
-         */
-        HashMap<Integer,SemesterObject> entireGradeDetails=new HashMap<>();
-        SemesterObject semesterObject=new SemesterObject(sgpa,0,courseDetailsPerSemester);
-        entireGradeDetails.put(currentSemNumber,semesterObject);
-        JSONObject semDetails=new JSONObject(entireGradeDetails);
-        System.out.println("Debug 1:"+entireGradeDetails);
-        Toast.makeText(this,semDetails.toString(),Toast.LENGTH_LONG).show();
-/*
+        scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
+        System.out.println("Debug 1:"+scoreDetailsFromFile);
+        String jsonString = "";
         try{
-//            FileOutputStream fileOutputStream=openFileOutput("File.txt",MODE_PRIVATE);
-//            fileOutputStream.write(detailsString.getBytes(), StandardOpenOption.APPEND);
-//            fileOutputStream.close();
-            FileWriter fw=new FileWriter("File.txt",true);
-            fw.write(detailsString);
-            Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            jsonString = JSONValue.toJSONString(scoreDetailsFromFile);
+            System.out.println(jsonString);
+        }catch(Exception e){
+            System.out.println("ERROR WHILE converting to json");
         }
+        Toast.makeText(this,jsonString,Toast.LENGTH_LONG).show();
         try{
-            FileInputStream file=openFileInput("File.txt");
-            InputStreamReader inputStreamReader=new InputStreamReader(file);
-            BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
-            StringBuffer stringBuffer=new StringBuffer();
-            String lines;
-            while((lines=bufferedReader.readLine())!=null)
-            {
-                stringBuffer.append(lines);
-            }
-            Toast.makeText(this, "After reading"+stringBuffer.toString(), Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
+            FileOutputStream fout=openFileOutput("scoreDetails.json",MODE_PRIVATE);
+            byte b[]=jsonString.getBytes();//converting string into byte array
+            fout.write(b);
+            fout.close();
+            System.out.println("success...");
+        }catch(Exception e){System.out.println(e);}
     }
+
+
 
     public void deleteRow(View view) {
         LinearLayout scoreEntry=(LinearLayout) findViewById(R.id.courseDetails);
