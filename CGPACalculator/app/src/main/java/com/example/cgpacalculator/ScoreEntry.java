@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONException;
 import org.json.simple.JSONValue;
 
 import java.io.FileNotFoundException;
@@ -86,7 +85,7 @@ public class ScoreEntry extends AppCompatActivity {
         sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0f);
         System.out.println("SGPA for semester "+currentSemNumber+" "+sgpa);
         thisSemester.put("CGPA",0.0f);
-        thisSemester.put("SGPA",sgpa);
+        thisSemester.put("SGPA",sgpa*1.0f);
         thisSemester.put("Credits",totalCreditsThisSem*1.0f);
         this.storeDetailsOfThisSem();
         // move to next screen
@@ -112,7 +111,7 @@ public class ScoreEntry extends AppCompatActivity {
             String courseName = editTextCourseName.getText().toString();
             int credits = Integer.parseInt(editTextCredits.getText().toString());
             int grade = Integer.parseInt(editTextGrades.getText().toString());
-
+            LinearLayout scoreEntry=(LinearLayout) findViewById(R.id.courseDetails);
             boolean validFlag = true;
             if(credits >= 1 && credits <=4 && grade >= 5 && grade <=10 && !courseName.equals("")){
                   View staticDetails=inflater.inflate(R.layout.static_course_details,null);
@@ -124,7 +123,6 @@ public class ScoreEntry extends AppCompatActivity {
                   textViewCourseName.setText(courseName);
                   textViewCredits.setText(Integer.toString(credits));
                   textViewGrade.setText(Integer.toString(grade));
-                  LinearLayout scoreEntry=(LinearLayout) findViewById(R.id.courseDetails);
                   scoreEntry.addView(staticDetails);
                   // add it to datastructure adn increment count
                 CourseObject currentCourse = new CourseObject(courseName, credits, grade);
