@@ -31,13 +31,13 @@
 
     <ProgressBar
         android:id="@+id/sgpaProgressBar"
-        style="?android:attr/progressBarStyle"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="156dp"
         android:layout_height="156dp"
         android:layout_margin="10dp"
-
-        android:animationResolution="@integer/material_motion_duration_medium_1"
-        android:background="@drawable/sgpa_foreground" />
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/cirucular_progress"
+        />
 
     <TextView
         android:id="@+id/textView3"
@@ -61,12 +61,12 @@
 
     <ProgressBar
         android:id="@+id/cgpaProgressBar"
-        style="?android:attr/progressBarStyle"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="156dp"
         android:layout_height="156dp"
-        android:background="@drawable/foreground"
-        android:max="100"
-        android:progress="90"
+        android:layout_margin="10dp"
+        tools:progress="50"
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/cirucular_progress" />
 
-        android:layout_margin="10dp" />
 </LinearLayout>

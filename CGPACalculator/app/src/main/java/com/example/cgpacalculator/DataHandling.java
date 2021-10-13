@@ -5,7 +5,6 @@ import org.json.simple.JSONValue;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 
 public class DataHandling {
     public static JSONObject fileToHashMap(InputStream fd){

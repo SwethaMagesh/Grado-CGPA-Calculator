@@ -1,9 +1,14 @@
 package com.example.cgpacalculator;
+
+import android.graphics.drawable.AnimatedStateListDrawable;
+import android.graphics.drawable.RotateDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -28,26 +33,33 @@ public class DisplaySGPA extends AppCompatActivity {
     }
     void setLayout(){
         // set progress bar and text for sgpa
-        float sgpa, cgpa, credits;
+        Double sgpa=0.0, cgpa=0.0, credits=0.0;
 
-        HashMap<String, Float> thisSem = scoreDetailsFromFile.get(Integer.toString(currentSemNumber));
-        sgpa = thisSem.get("SGPA");
-        cgpa = thisSem.get("CGPA");
-        credits = thisSem.get("Credits");
+        HashMap thisSem = scoreDetailsFromFile.get(Integer.toString(currentSemNumber));
+        try {
+            sgpa= (Double) thisSem.get("SGPA");
+            cgpa=(Double) thisSem.get("CGPA");
+            credits=(Double) thisSem.get("Credits");
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+
         TextView textViewSGPA = (TextView) findViewById(R.id.sgpa_text2);
-        textViewSGPA.setText(Float.toString(sgpa));
+        textViewSGPA.setText(""+sgpa);
+
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.sgpaProgressBar);
-        int percentSGPA = Math.round(sgpa*10);
+        int percentSGPA =  (int) Math.round(sgpa)*10;
         progressBar.setProgress(percentSGPA);
         progressBar.setMax(100);
-
         TextView textViewCGPA = (TextView) findViewById(R.id.cgpa_text);
-        textViewCGPA.setText(Float.toString(cgpa));
+        textViewCGPA.setText(""+cgpa);
         ProgressBar cgpaProgressbar = (ProgressBar) findViewById(R.id.cgpaProgressBar);
-        int percentCGPA = Math.round(sgpa*10);
+
+        int percentCGPA = (int) Math.round(cgpa*10);
         cgpaProgressbar.setProgress(percentCGPA);
         cgpaProgressbar.setMax(100);
-
-
+        System.out.println("Updated");
     }
 }
