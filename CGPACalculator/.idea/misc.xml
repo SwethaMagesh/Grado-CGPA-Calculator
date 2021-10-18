@@ -5,9 +5,16 @@
       <map>
         <entry key="..\:/Projects/Sem 7/CGPA CALCI/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_display_sgpa.xml" value="0.3333333333333333" />
         <entry key="..\:/Projects/Sem 7/CGPA CALCI/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_score_entry.xml" value="0.1" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/drawable/cirucular_progress.xml" value="0.2203125" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/drawable/foreground.xml" value="0.2203125" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/drawable/semester_1_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/drawable/semester_2_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_display_cgpa.xml" value="0.22" />
         <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_display_sgpa.xml" value="0.25" />
         <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_score_entry.xml" value="0.2" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_select_semester.xml" value="0.15806159420289856" />
         <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/course_details_row.xml" value="0.25" />
+        <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/semester_details.xml" value="0.25" />
         <entry key="..\:/Sem7/MSE/MSE_ASSNPRES/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/static_course_details.xml" value="0.25" />
         <entry key="..\:/Users/swetha/AndroidStudioProjects/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_display_sgpa.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/swetha/AndroidStudioProjects/CGPA-Calculator/CGPACalculator/app/src/main/res/layout/activity_main.xml" value="0.14356884057971014" />
