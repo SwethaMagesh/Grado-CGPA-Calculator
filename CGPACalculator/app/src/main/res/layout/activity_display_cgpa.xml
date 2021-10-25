@@ -1,9 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".DisplayCGPA">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:text="Semester Report"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/sem1"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_1_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="1"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem2"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_2_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="2"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem3"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_3_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="3"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem4"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_4_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="4"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/sem5"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_5_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="5"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem6"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_6_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="6"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem7"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_7_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="7"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/sem8"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/semester_8_foreground"
+            android:onClick="onClickingSemesterButtons"
+            android:tag="8"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/sgpa_dis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:text="SGPA"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/cgpa_dis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:text="CGPA"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+</LinearLayout>

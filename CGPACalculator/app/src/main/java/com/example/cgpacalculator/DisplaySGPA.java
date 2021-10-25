@@ -1,8 +1,5 @@
 package com.example.cgpacalculator;
 
-import android.graphics.drawable.AnimatedStateListDrawable;
-import android.graphics.drawable.RotateDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;

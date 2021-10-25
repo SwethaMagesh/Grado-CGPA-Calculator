@@ -41,10 +41,10 @@ public class ScoreEntry extends AppCompatActivity {
 
     int courseCount = 0;
     HashMap<Integer, CourseObject> courseDetailsPerSemester;
-    HashMap<String, HashMap<String, Float>> scoreDetailsFromFile;
+    HashMap<String, HashMap<String, Double>> scoreDetailsFromFile;
     int currentSemNumber;
-    float sgpa;
-    HashMap<String, Float> thisSemester;
+    Double sgpa;
+    HashMap<String, Double> thisSemester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class ScoreEntry extends AppCompatActivity {
         }
     }
 
-    public void onCalculateSGPA(View v) {
+    public void onCalculateSGPA(View v) throws FileNotFoundException {
         if(courseCount==0){
             Toast.makeText(this, "Please enter at least one course",Toast.LENGTH_LONG).show();
             return;
@@ -82,14 +82,14 @@ public class ScoreEntry extends AppCompatActivity {
             System.out.println("Till course "+value.courseName+" "+totalCreditsObtained);
         }
 
-        sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0f);
+        sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0);
         System.out.println("SGPA for semester "+currentSemNumber+" "+sgpa);
-        thisSemester.put("CGPA",0.0f);
-        thisSemester.put("SGPA",sgpa*1.0f);
-        thisSemester.put("Credits",totalCreditsThisSem*1.0f);
+        thisSemester.put("CGPA",0.0);
+        thisSemester.put("SGPA",sgpa*1.0);
+        thisSemester.put("Credits",totalCreditsThisSem*1.0);
         this.storeDetailsOfThisSem();
         // move to next screen
-        Intent intent = new Intent(this, DisplaySGPA.class);
+        Intent intent = new Intent(this, DisplayCGPA.class);
         intent.putExtra("Semester",currentSemNumber);
         startActivity(intent);
 
@@ -142,27 +142,12 @@ public class ScoreEntry extends AppCompatActivity {
         dialog.show();
     }
 
-    public void storeDetailsOfThisSem() {
+    public void storeDetailsOfThisSem() throws FileNotFoundException {
         System.out.println("Saving the details and sgpa");
 
         scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
-        System.out.println("Debug 1:"+scoreDetailsFromFile);
-        String jsonString = "";
-        try{
-            jsonString = JSONValue.toJSONString(scoreDetailsFromFile);
-            System.out.println(jsonString);
-        }catch(Exception e){
-            System.out.println("ERROR WHILE converting to json");
-        }
-        Toast.makeText(this,jsonString,Toast.LENGTH_LONG).show();
-        try{
-
-            FileOutputStream fout=openFileOutput("scoreDetails.json",MODE_PRIVATE);
-            byte b[]=jsonString.getBytes();//converting string into byte array
-            fout.write(b);
-            fout.close();
-            System.out.println("success...");
-        }catch(Exception e){System.out.println(e);}
+        FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
+        DataHandling.writeIntoFile(fout,scoreDetailsFromFile);
     }
 
 
