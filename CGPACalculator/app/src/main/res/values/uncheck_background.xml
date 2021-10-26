@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="logo_background">#93D0D8</color>
+    <color name="uncheck_background">#A70B22</color>
 </resources>

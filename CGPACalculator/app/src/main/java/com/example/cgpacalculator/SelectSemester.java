@@ -19,7 +19,7 @@ public class SelectSemester extends AppCompatActivity {
     }
     void populateSpinner(){
         Spinner spin = (Spinner) findViewById(R.id.spinner);
-        String semesters[] = {"Select","1", "2","3","4","5","6","7","8","9","10"};
+        String semesters[] = {"Select","1", "2","3","4","5","6","7","8"};
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,semesters);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner

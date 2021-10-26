@@ -20,6 +20,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -30,8 +31,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_1_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_1_foreground"
             android:tag="1"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -40,8 +42,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_2_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_2_foreground"
             android:tag="2"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -50,8 +53,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_3_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_3_foreground"
             android:tag="3"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -60,13 +64,15 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_4_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_4_foreground"
             android:tag="4"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -77,8 +83,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_5_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_5_foreground"
             android:tag="5"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -87,8 +94,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_6_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_6_foreground"
             android:tag="6"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -97,8 +105,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_7_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_7_foreground"
             android:tag="7"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -107,8 +116,9 @@
             android:layout_width="50dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:background="@drawable/semester_8_foreground"
+            android:background="@android:drawable/radiobutton_off_background"
             android:onClick="onClickingSemesterButtons"
+            android:src="@drawable/semester_8_foreground"
             android:tag="8"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>

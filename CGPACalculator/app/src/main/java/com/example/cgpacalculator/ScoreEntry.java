@@ -21,6 +21,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScoreEntry extends AppCompatActivity {
+    /*
+    Course object , course count, CourseDetailsPerSemester<Int, CourseObject>, scoreDetailsFromFile, sgpa, currentSemNo, ThisSemester<String, Double>
+    Functions:
+    1. add course, del course
+    2. Calc sgpa
+    3. store details in file
+     */
     public class CourseObject{
         String courseName;
         int credits;
@@ -84,9 +91,13 @@ public class ScoreEntry extends AppCompatActivity {
 
         sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0);
         System.out.println("SGPA for semester "+currentSemNumber+" "+sgpa);
-        thisSemester.put("CGPA",0.0);
+        Double cgpa =0.0;
+        thisSemester.put("CGPA", cgpa);
         thisSemester.put("SGPA",sgpa*1.0);
         thisSemester.put("Credits",totalCreditsThisSem*1.0);
+        scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
+        cgpa = CalculateCGPA.getCgpaFromPrevCgpa(scoreDetailsFromFile,currentSemNumber);
+        thisSemester.put("CGPA", cgpa);
         this.storeDetailsOfThisSem();
         // move to next screen
         Intent intent = new Intent(this, DisplayCGPA.class);
@@ -144,8 +155,8 @@ public class ScoreEntry extends AppCompatActivity {
 
     public void storeDetailsOfThisSem() throws FileNotFoundException {
         System.out.println("Saving the details and sgpa");
-
         scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
+        // update future sems from thisSemester to 8
         FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
         DataHandling.writeIntoFile(fout,scoreDetailsFromFile);
     }
