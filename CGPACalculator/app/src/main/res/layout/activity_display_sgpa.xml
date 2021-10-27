@@ -39,34 +39,13 @@
         android:progressDrawable="@drawable/cirucular_progress"
         />
 
-    <TextView
-        android:id="@+id/textView3"
+    <Button
+        android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="CGPA for the semester is"
-        android:textAlignment="center"
-        android:textSize="34sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/cgpa_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
-
-    <ProgressBar
-        android:id="@+id/cgpaProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="156dp"
-        android:layout_height="156dp"
-        android:layout_margin="10dp"
-        tools:progress="50"
-        android:indeterminateOnly="false"
-        android:progressDrawable="@drawable/cirucular_progress" />
+        android:layout_margin="30dp"
+        android:onClick="displayCGPA"
+        android:padding="20dp"
+        android:text="Calculate CGPA" />
 
 </LinearLayout>

@@ -1,18 +1,21 @@
 package com.example.cgpacalculator;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.json.simple.JSONValue;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -57,6 +60,12 @@ public class ScoreEntry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_entry);
+
+        //Set Home Button
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.mipmap.home_button);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         courseDetailsPerSemester = new HashMap<Integer, CourseObject>();
         currentSemNumber = Integer.parseInt(getIntent().getExtras().getString("Semester"));
         TextView header = (TextView) findViewById(R.id.textView2);
@@ -72,39 +81,50 @@ public class ScoreEntry extends AppCompatActivity {
             scoreDetailsFromFile = new HashMap<>();
         }
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Intent intent=new Intent(this,SelectSemester.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public void onCalculateSGPA(View v) throws FileNotFoundException {
         if(courseCount==0){
             Toast.makeText(this, "Please enter at least one course",Toast.LENGTH_LONG).show();
             return;
         }
-        int totalCreditsThisSem  = 0;
-        int totalCreditsObtained = 0;
+        int totalGradePointsThisSem  = 0;
+        int totalGradePointsObtained = 0;
         // calculate sgpa from the given data
         for (Map.Entry mapElement : courseDetailsPerSemester.entrySet()) {
             //int key = (int) mapElement.getKey();
             CourseObject value = (CourseObject) mapElement.getValue() ;
-            totalCreditsObtained += value.gpoints * value.credits;
-            totalCreditsThisSem  += value.credits * 10;
-            System.out.println("Till course "+value.courseName+" "+totalCreditsObtained);
+            totalGradePointsObtained += value.gpoints * value.credits;
+            totalGradePointsThisSem  += value.credits * 10;
+            System.out.println("Till course "+value.courseName+" "+totalGradePointsObtained);
         }
 
-        sgpa = 10*totalCreditsObtained/(totalCreditsThisSem*1.0);
+        sgpa = 10*totalGradePointsObtained/(totalGradePointsThisSem*1.0);
         System.out.println("SGPA for semester "+currentSemNumber+" "+sgpa);
         Double cgpa =0.0;
         thisSemester.put("CGPA", cgpa);
         thisSemester.put("SGPA",sgpa*1.0);
-        thisSemester.put("Credits",totalCreditsThisSem*1.0);
+        thisSemester.put("Credits",totalGradePointsThisSem*0.1);
         scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
         cgpa = CalculateCGPA.getCgpaFromPrevCgpa(scoreDetailsFromFile,currentSemNumber);
         thisSemester.put("CGPA", cgpa);
+        System.out.println(thisSemester);
         this.storeDetailsOfThisSem();
         // move to next screen
-        Intent intent = new Intent(this, DisplayCGPA.class);
+        Intent intent=new Intent(this,DisplaySGPA.class);
         intent.putExtra("Semester",currentSemNumber);
         startActivity(intent);
-
     }
+
 
     public void onAddCourse(View v) {
         LayoutInflater inflater = getLayoutInflater();
@@ -125,7 +145,14 @@ public class ScoreEntry extends AppCompatActivity {
             LinearLayout scoreEntry=(LinearLayout) findViewById(R.id.courseDetails);
             boolean validFlag = true;
             if(credits >= 1 && credits <=4 && grade >= 5 && grade <=10 && !courseName.equals("")){
-                  View staticDetails=inflater.inflate(R.layout.static_course_details,null);
+                  if(courseCount==0) {
+                      View staticDetails1 = inflater.inflate(R.layout.static_course_details, null);
+                      staticDetails1.setId(courseCount);
+                      ImageView deletebutton = (ImageView) staticDetails1.findViewById(R.id.imageView);
+                      deletebutton.setVisibility(View.INVISIBLE);
+                      scoreEntry.addView(staticDetails1);
+                  }
+                View staticDetails=inflater.inflate(R.layout.static_course_details,null);
                  courseCount +=1;
                    staticDetails.setId(courseCount);
                   TextView textViewCourseName = (TextView) staticDetails.findViewById(R.id.cName);
@@ -134,6 +161,9 @@ public class ScoreEntry extends AppCompatActivity {
                   textViewCourseName.setText(courseName);
                   textViewCredits.setText(Integer.toString(credits));
                   textViewGrade.setText(Integer.toString(grade));
+                  textViewCourseName.setTypeface(null, Typeface.NORMAL);
+                  textViewCredits.setTypeface(null, Typeface.NORMAL);
+                  textViewGrade.setTypeface(null, Typeface.NORMAL);
                   scoreEntry.addView(staticDetails);
                   // add it to datastructure adn increment count
                 CourseObject currentCourse = new CourseObject(courseName, credits, grade);
@@ -176,6 +206,10 @@ public class ScoreEntry extends AppCompatActivity {
             v.setId(i-1);
         }
         courseCount -=1;
+        if(courseCount==0)
+        {
+            scoreEntry.removeViewAt(courseCount);
+        }
         Toast.makeText(this,"Course Deleted!!",Toast.LENGTH_LONG).show();
     }
 }

@@ -8,6 +8,7 @@ public class CalculateCGPA {
         double cgpa=0;
         double credits=0;
         double totalCredits=0;
+        System.out.println(scoreDetailsFromFile+" "+sem);
         for(int i=1;i<=sem;i++){
 
             if(scoreDetailsFromFile.containsKey(Integer.toString(i))){
@@ -19,11 +20,12 @@ public class CalculateCGPA {
             }
             else{
                 cgpa =0;
+                System.out.println("Returning 0");
                 return cgpa;
             }
         }
         cgpa = credits/totalCredits;
-        cgpa = Math.round(cgpa*100)/100;
+       // cgpa = Math.round(cgpa*100)/100;
         System.out.println(cgpa+" sem number"+sem);
         return cgpa;
     }
