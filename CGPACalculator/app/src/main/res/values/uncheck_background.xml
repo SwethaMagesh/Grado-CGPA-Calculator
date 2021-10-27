@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="uncheck_background">#A70B22</color>
+    <color name="uncheck_background">#e65f05</color>
 </resources>
+
+<!--
+#ebae15
+#eb8715
+#eb6315
+#b114c9
+#f2be6f
+#f0fc05
+#e65f05
+-->
