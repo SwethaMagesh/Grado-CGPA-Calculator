@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class DisplaySGPA extends AppCompatActivity {
+    String roll_no;
     HashMap<String, HashMap<String, Float>> scoreDetailsFromFile;
     int currentSemNumber;
     @Override
@@ -30,17 +31,23 @@ public class DisplaySGPA extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         currentSemNumber = getIntent().getExtras().getInt("Semester");
+        roll_no=getIntent().getExtras().getString("Roll No");
         InputStream fd = null;
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd);
+            scoreDetailsFromFile = DataHandling.fileToHashMap(fd,roll_no);
             System.out.println(scoreDetailsFromFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         setLayout();
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem menuItem)
     {
@@ -48,9 +55,15 @@ public class DisplaySGPA extends AppCompatActivity {
         {
             case android.R.id.home:
                 Intent intent=new Intent(this,SelectSemester.class);
+                intent.putExtra("Roll No",roll_no);
+                startActivity(intent);
+                return true;
+            case R.id.logout:
+                intent=new Intent(this,LoginActivity.class);
                 startActivity(intent);
                 return true;
         }
+
         return super.onOptionsItemSelected(menuItem);
     }
     void setLayout(){
@@ -72,6 +85,7 @@ public class DisplaySGPA extends AppCompatActivity {
     public void displayCGPA(View view)
     {
         Intent intent = new Intent(this, DisplayCGPA.class);
+        intent.putExtra("Roll No",roll_no);
         intent.putExtra("Semester",currentSemNumber);
         startActivity(intent);
     }

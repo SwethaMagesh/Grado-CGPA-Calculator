@@ -7,19 +7,20 @@ import org.json.simple.JSONValue;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 
 public class DataHandling {
-    public static JSONObject fileToHashMap(InputStream fd) {
+    public static JSONObject fileToHashMap(InputStream fd,String roll_no) {
         //readFile();
         try {
             String jsonFileContents = jsonToString(fd);
             System.out.println(jsonFileContents);
-            JSONObject scoreDetailsFromFile = jsonToMap(jsonFileContents);
-            System.out.println(scoreDetailsFromFile);
-            return scoreDetailsFromFile;
+            JSONObject totalDetails = jsonToMap(jsonFileContents,roll_no);
+            System.out.println(totalDetails);
+            return totalDetails;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,12 +28,13 @@ public class DataHandling {
         return new JSONObject();
     }
 
-    public static JSONObject jsonToMap(String jstring) {
+    public static JSONObject jsonToMap(String jstring,String roll_no) {
         try {
             System.out.println("Converting to hashmap");
             JSONObject json = (JSONObject) JSONValue.parse(jstring);
-            System.out.println(json.size());
-            return json;
+            return (JSONObject) json.get(roll_no);
+//            System.out.println(json.size());
+//            return json;
             //System.out.println(map.keySet());
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,11 +56,11 @@ public class DataHandling {
         return "";
     }
 
-    public static String hashMapToJSON(HashMap scoreDetailsFromFile) {
-        System.out.println("Debug 1:" + scoreDetailsFromFile);
+    public static String hashMapToJSON(HashMap totalDetails) {
+        System.out.println("Debug 1:" + totalDetails);
         String jsonString = "";
         try {
-            jsonString = JSONValue.toJSONString(scoreDetailsFromFile);
+            jsonString = JSONValue.toJSONString(totalDetails);
             System.out.println(jsonString);
         } catch (Exception e) {
             System.out.println("ERROR WHILE converting to json");
@@ -66,11 +68,13 @@ public class DataHandling {
         return jsonString;
     }
 
-    public static void writeIntoFile(FileOutputStream fout,HashMap scoreDetailsFromFile) {
+    public static void writeIntoFile(FileOutputStream fout, HashMap totalDetails) {
         try {
 
 //            FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
-            String jsonString=hashMapToJSON(scoreDetailsFromFile);
+
+            String jsonString=hashMapToJSON(totalDetails);
+
             byte b[] = jsonString.getBytes();//converting string into byte array
             fout.write(b);
             fout.close();
