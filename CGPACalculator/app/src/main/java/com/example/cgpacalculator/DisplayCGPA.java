@@ -27,7 +27,8 @@ import java.util.HashMap;
 public class DisplayCGPA extends AppCompatActivity {
 
     String roll_no;
-    HashMap<String, HashMap<String, Double>> scoreDetailsFromFile;
+    HashMap totalDetails;
+    HashMap scoreDetailsFromFile;
     InputStream fd=null;
     int semesterNo;
     @Override
@@ -41,7 +42,8 @@ public class DisplayCGPA extends AppCompatActivity {
         roll_no=getIntent().getExtras().getString("Roll No");
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd,roll_no);
+            totalDetails = DataHandling.fileToHashMap(fd);
+            scoreDetailsFromFile= (HashMap) totalDetails.get(roll_no);
             System.out.println(scoreDetailsFromFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -93,7 +95,7 @@ public class DisplayCGPA extends AppCompatActivity {
                 System.out.println("Going to get values:)");
                 showDialogToEnterDetails();
             }
-            HashMap thisSem = scoreDetailsFromFile.get(Integer.toString(semesterNo));
+            HashMap thisSem = (HashMap) scoreDetailsFromFile.get(Integer.toString(semesterNo));
             try {
 
                 sgpa = (Double) thisSem.get("SGPA");
@@ -153,7 +155,7 @@ public class DisplayCGPA extends AppCompatActivity {
         EditText creditsView=alertLayout.findViewById(R.id.credits_for_sem);
         EditText sgpaView=alertLayout.findViewById(R.id.sgpa_for_sem);
         if (scoreDetailsFromFile.containsKey(Integer.toString(semesterNo))) {
-            HashMap thisSem=scoreDetailsFromFile.get(Integer.toString(semesterNo));
+            HashMap thisSem= (HashMap) scoreDetailsFromFile.get(Integer.toString(semesterNo));
             Double sgpa= (Double)thisSem.get("SGPA");
             Double credits=(Double)thisSem.get("Credits");
             creditsView.setText(Double.toString(credits));
@@ -200,14 +202,13 @@ public class DisplayCGPA extends AppCompatActivity {
             if(scoreDetailsFromFile.containsKey(Integer.toString(i)) )
             {
                 //Calculate CGPA
-                thisSemester=scoreDetailsFromFile.get(Integer.toString(i));
+                thisSemester= (HashMap<String, Double>) scoreDetailsFromFile.get(Integer.toString(i));
                 cgpa=CalculateCGPA.getCgpaFromPrevCgpa(scoreDetailsFromFile,i);
                 thisSemester.put("CGPA",cgpa);
                 System.out.println("Putting CGPA into semester"+i+" "+cgpa);
                 scoreDetailsFromFile.put(Integer.toString(i),thisSemester);
             }
         }
-        HashMap<String,HashMap>totalDetails=new HashMap<>();
         totalDetails.put(roll_no,scoreDetailsFromFile);
         FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
         DataHandling.writeIntoFile(fout,totalDetails);

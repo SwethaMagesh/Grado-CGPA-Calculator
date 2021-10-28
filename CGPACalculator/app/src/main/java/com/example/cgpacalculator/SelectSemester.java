@@ -77,12 +77,12 @@ public class SelectSemester extends AppCompatActivity {
     public void viewReportPage(View view)
     {
         InputStream fd = null;
-        HashMap scoreDetailsFromFile;
+        HashMap totalDetails;
         try {
             System.out.println("Hi");
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd,roll_no);
-            if(scoreDetailsFromFile!=null) {
+            totalDetails = DataHandling.fileToHashMap(fd);
+            if(totalDetails!=null && totalDetails.containsKey(roll_no)) {
                 Intent intent = new Intent(this, DisplayCGPA.class);
                 intent.putExtra("Semester", 0);
                 intent.putExtra("Roll No", roll_no);

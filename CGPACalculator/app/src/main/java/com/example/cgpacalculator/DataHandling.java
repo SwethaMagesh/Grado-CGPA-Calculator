@@ -13,12 +13,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class DataHandling {
-    public static JSONObject fileToHashMap(InputStream fd,String roll_no) {
+    public static JSONObject fileToHashMap(InputStream fd) {
         //readFile();
         try {
             String jsonFileContents = jsonToString(fd);
             System.out.println(jsonFileContents);
-            JSONObject totalDetails = jsonToMap(jsonFileContents,roll_no);
+            JSONObject totalDetails = jsonToMap(jsonFileContents);
             System.out.println(totalDetails);
             return totalDetails;
 
@@ -28,13 +28,12 @@ public class DataHandling {
         return new JSONObject();
     }
 
-    public static JSONObject jsonToMap(String jstring,String roll_no) {
+    public static JSONObject jsonToMap(String jstring) {
         try {
             System.out.println("Converting to hashmap");
             JSONObject json = (JSONObject) JSONValue.parse(jstring);
-            return (JSONObject) json.get(roll_no);
-//            System.out.println(json.size());
-//            return json;
+            System.out.println(json.size());
+            return json;
             //System.out.println(map.keySet());
         } catch (Exception e) {
             e.printStackTrace();

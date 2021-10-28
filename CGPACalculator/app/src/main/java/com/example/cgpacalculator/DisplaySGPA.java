@@ -18,7 +18,8 @@ import java.util.HashMap;
 
 public class DisplaySGPA extends AppCompatActivity {
     String roll_no;
-    HashMap<String, HashMap<String, Float>> scoreDetailsFromFile;
+    HashMap scoreDetailsFromFile;
+    HashMap totalDetails;
     int currentSemNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,8 @@ public class DisplaySGPA extends AppCompatActivity {
         InputStream fd = null;
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd,roll_no);
+            totalDetails = DataHandling.fileToHashMap(fd);
+            scoreDetailsFromFile= (HashMap) totalDetails.get(roll_no);
             System.out.println(scoreDetailsFromFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,7 +72,7 @@ public class DisplaySGPA extends AppCompatActivity {
         // set progress bar and text for sgpa
         Double sgpa=0.0, cgpa=0.0, credits=0.0;
 
-        HashMap thisSem = scoreDetailsFromFile.get(Integer.toString(currentSemNumber));
+        HashMap thisSem = (HashMap) scoreDetailsFromFile.get(Integer.toString(currentSemNumber));
         sgpa= (Double) thisSem.get("SGPA");
 
         TextView textViewSGPA = (TextView) findViewById(R.id.sgpa_text2);

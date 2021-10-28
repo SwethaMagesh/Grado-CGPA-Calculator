@@ -34,6 +34,7 @@ public class ScoreEntry extends AppCompatActivity {
     3. store details in file
      */
     String roll_no;
+    HashMap<String,HashMap<String, HashMap<String, Double>>> totalDetails;
     public class CourseObject{
         String courseName;
 
@@ -55,7 +56,6 @@ public class ScoreEntry extends AppCompatActivity {
 
     int courseCount = 0;
     HashMap<Integer, CourseObject> courseDetailsPerSemester;
-    HashMap<String,HashMap> totalDetails;
     HashMap<String, HashMap<String, Double>> scoreDetailsFromFile;
     int currentSemNumber;
     Double sgpa;
@@ -79,11 +79,15 @@ public class ScoreEntry extends AppCompatActivity {
         InputStream fd = null;
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd,roll_no);
+            totalDetails = DataHandling.fileToHashMap(fd);
+            System.out.println("Printing values from file:"+totalDetails);
+            scoreDetailsFromFile= (HashMap) totalDetails.get(roll_no);
             System.out.println(scoreDetailsFromFile);
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            scoreDetailsFromFile = new HashMap<>();
+            totalDetails = new HashMap<>();
         }
         if(scoreDetailsFromFile==null)
             scoreDetailsFromFile=new HashMap<>();
@@ -206,9 +210,11 @@ public class ScoreEntry extends AppCompatActivity {
     public void storeDetailsOfThisSem() throws FileNotFoundException {
         System.out.println("Saving the details and sgpa");
         scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
-        totalDetails=new HashMap<>();
+        System.out.println(scoreDetailsFromFile);
         totalDetails.put(roll_no,scoreDetailsFromFile);
+        System.out.println(totalDetails);
         // update future sems from thisSemester to 8
+        System.out.println("Storing values in file");
         FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
         DataHandling.writeIntoFile(fout,totalDetails);
     }
