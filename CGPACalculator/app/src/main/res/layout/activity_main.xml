@@ -11,7 +11,7 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="276dp"
-        app:srcCompat="@mipmap/logoformain" />
+        android:layout_width="wrap_content"
+        android:layout_height="455dp"
+        app:srcCompat="@drawable/grado" />
 </LinearLayout>

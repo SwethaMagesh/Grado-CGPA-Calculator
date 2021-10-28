@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:layout_margin="30dp"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".DisplaySGPA">
@@ -16,7 +17,7 @@
         android:layout_margin="10dp"
         android:text="SGPA for the semester is"
         android:textAlignment="center"
-        android:textSize="34sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
@@ -36,8 +37,7 @@
         android:layout_height="156dp"
         android:layout_margin="10dp"
         android:indeterminateOnly="false"
-        android:progressDrawable="@drawable/cirucular_progress"
-        />
+        android:progressDrawable="@drawable/cirucular_progress" />
 
     <Button
         android:id="@+id/button4"

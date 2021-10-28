@@ -25,6 +25,7 @@
         android:layout_width="295dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
+        android:textAlignment="center"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button

@@ -37,7 +37,7 @@ public class DisplayCGPA extends AppCompatActivity {
         setContentView(R.layout.activity_display_cgpa);
         //Set home button
         ActionBar action=getSupportActionBar();
-        action.setHomeAsUpIndicator(R.mipmap.home_button);
+        action.setHomeAsUpIndicator(R.drawable.home_24);
         action.setDisplayHomeAsUpEnabled(true);
         roll_no=getIntent().getExtras().getString("Roll No");
         try {
@@ -101,7 +101,7 @@ public class DisplayCGPA extends AppCompatActivity {
                 sgpa = (Double) thisSem.get("SGPA");
                 cgpa = (Double) thisSem.get("CGPA");
                 if (cgpa == 0) {
-                    cgpaDisplay.setText("To calculate CGPA, Enter SGPA with credits for all previous semesters!!");
+                    cgpaDisplay.setText("Enter details for all previous semesters!!");
                 } else {
                     cgpaDisplay.setText("CGPA upto semester " + semesterNo + " is " +String.format("%.2f",cgpa.floatValue()));
                 }

@@ -26,7 +26,7 @@ public class SelectSemester extends AppCompatActivity {
         roll_no=getIntent().getExtras().getString("Roll No");
         //Set home button
         ActionBar actionBar=getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.mipmap.home_button);
+        actionBar.setHomeAsUpIndicator(R.drawable.home_24);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         populateSpinner();

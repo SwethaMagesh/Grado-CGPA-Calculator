@@ -68,7 +68,7 @@ public class ScoreEntry extends AppCompatActivity {
 
         //Set Home Button
         ActionBar actionBar=getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.mipmap.home_button);
+        actionBar.setHomeAsUpIndicator(R.drawable.home_24);
         actionBar.setDisplayHomeAsUpEnabled(true);
         roll_no=getIntent().getExtras().getString("Roll No");
         courseDetailsPerSemester = new HashMap<Integer, CourseObject>();
