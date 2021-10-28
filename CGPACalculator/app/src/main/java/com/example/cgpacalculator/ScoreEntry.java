@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -31,8 +33,11 @@ public class ScoreEntry extends AppCompatActivity {
     2. Calc sgpa
     3. store details in file
      */
+    String roll_no;
+    HashMap<String,HashMap<String, HashMap<String, Double>>> totalDetails;
     public class CourseObject{
         String courseName;
+
         int credits;
         int gpoints;
 
@@ -65,7 +70,7 @@ public class ScoreEntry extends AppCompatActivity {
         ActionBar actionBar=getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.mipmap.home_button);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        roll_no=getIntent().getExtras().getString("Roll No");
         courseDetailsPerSemester = new HashMap<Integer, CourseObject>();
         currentSemNumber = Integer.parseInt(getIntent().getExtras().getString("Semester"));
         TextView header = (TextView) findViewById(R.id.textView2);
@@ -74,19 +79,37 @@ public class ScoreEntry extends AppCompatActivity {
         InputStream fd = null;
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd);
+            totalDetails = DataHandling.fileToHashMap(fd);
+            System.out.println("Printing values from file:"+totalDetails);
+            scoreDetailsFromFile= (HashMap) totalDetails.get(roll_no);
             System.out.println(scoreDetailsFromFile);
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            scoreDetailsFromFile = new HashMap<>();
+            totalDetails = new HashMap<>();
         }
+        if(scoreDetailsFromFile==null)
+            scoreDetailsFromFile=new HashMap<>();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
+        Intent intent;
         switch (item.getItemId()){
             case android.R.id.home:
-                Intent intent=new Intent(this,SelectSemester.class);
+                intent=new Intent(this,SelectSemester.class);
+                intent.putExtra("Roll No",roll_no);
+                startActivity(intent);
+                return true;
+            case R.id.logout:
+                intent=new Intent(this,LoginActivity.class);
                 startActivity(intent);
                 return true;
         }
@@ -122,6 +145,7 @@ public class ScoreEntry extends AppCompatActivity {
         // move to next screen
         Intent intent=new Intent(this,DisplaySGPA.class);
         intent.putExtra("Semester",currentSemNumber);
+        intent.putExtra("Roll No",roll_no);
         startActivity(intent);
     }
 
@@ -186,9 +210,13 @@ public class ScoreEntry extends AppCompatActivity {
     public void storeDetailsOfThisSem() throws FileNotFoundException {
         System.out.println("Saving the details and sgpa");
         scoreDetailsFromFile.put(Integer.toString(currentSemNumber),thisSemester);
+        System.out.println(scoreDetailsFromFile);
+        totalDetails.put(roll_no,scoreDetailsFromFile);
+        System.out.println(totalDetails);
         // update future sems from thisSemester to 8
+        System.out.println("Storing values in file");
         FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
-        DataHandling.writeIntoFile(fout,scoreDetailsFromFile);
+        DataHandling.writeIntoFile(fout,totalDetails);
     }
 
 

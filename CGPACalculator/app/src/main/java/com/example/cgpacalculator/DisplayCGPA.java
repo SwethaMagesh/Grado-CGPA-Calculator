@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -24,7 +26,9 @@ import java.util.HashMap;
 
 public class DisplayCGPA extends AppCompatActivity {
 
-    HashMap<String, HashMap<String, Double>> scoreDetailsFromFile;
+    String roll_no;
+    HashMap totalDetails;
+    HashMap scoreDetailsFromFile;
     InputStream fd=null;
     int semesterNo;
     @Override
@@ -35,9 +39,11 @@ public class DisplayCGPA extends AppCompatActivity {
         ActionBar action=getSupportActionBar();
         action.setHomeAsUpIndicator(R.mipmap.home_button);
         action.setDisplayHomeAsUpEnabled(true);
+        roll_no=getIntent().getExtras().getString("Roll No");
         try {
             fd = openFileInput("scoreDetails.json");
-            scoreDetailsFromFile = DataHandling.fileToHashMap(fd);
+            totalDetails = DataHandling.fileToHashMap(fd);
+            scoreDetailsFromFile= (HashMap) totalDetails.get(roll_no);
             System.out.println(scoreDetailsFromFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -47,14 +53,24 @@ public class DisplayCGPA extends AppCompatActivity {
 //        if(semesterNo!=0)
         displaySgpaAndCgpa();
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent=new Intent(this,SelectSemester.class);
+                intent.putExtra("Roll No",roll_no);
                 startActivity(intent);
+                return true;
+            case R.id.logout:
+                Intent intent1=new Intent(this,LoginActivity.class);
+                startActivity(intent1);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -79,7 +95,7 @@ public class DisplayCGPA extends AppCompatActivity {
                 System.out.println("Going to get values:)");
                 showDialogToEnterDetails();
             }
-            HashMap thisSem = scoreDetailsFromFile.get(Integer.toString(semesterNo));
+            HashMap thisSem = (HashMap) scoreDetailsFromFile.get(Integer.toString(semesterNo));
             try {
 
                 sgpa = (Double) thisSem.get("SGPA");
@@ -139,7 +155,7 @@ public class DisplayCGPA extends AppCompatActivity {
         EditText creditsView=alertLayout.findViewById(R.id.credits_for_sem);
         EditText sgpaView=alertLayout.findViewById(R.id.sgpa_for_sem);
         if (scoreDetailsFromFile.containsKey(Integer.toString(semesterNo))) {
-            HashMap thisSem=scoreDetailsFromFile.get(Integer.toString(semesterNo));
+            HashMap thisSem= (HashMap) scoreDetailsFromFile.get(Integer.toString(semesterNo));
             Double sgpa= (Double)thisSem.get("SGPA");
             Double credits=(Double)thisSem.get("Credits");
             creditsView.setText(Double.toString(credits));
@@ -160,6 +176,7 @@ public class DisplayCGPA extends AppCompatActivity {
         alert.setNeutralButton("Enter course wise marks",(dialog,which)->{
             //Start Intent to scoreEntry Activity
             Intent intent=new Intent(this,ScoreEntry.class);
+            intent.putExtra("Roll No",roll_no);
             intent.putExtra("Semester",Integer.toString(semesterNo));
             startActivity(intent);
         });
@@ -185,15 +202,16 @@ public class DisplayCGPA extends AppCompatActivity {
             if(scoreDetailsFromFile.containsKey(Integer.toString(i)) )
             {
                 //Calculate CGPA
-                thisSemester=scoreDetailsFromFile.get(Integer.toString(i));
+                thisSemester= (HashMap<String, Double>) scoreDetailsFromFile.get(Integer.toString(i));
                 cgpa=CalculateCGPA.getCgpaFromPrevCgpa(scoreDetailsFromFile,i);
                 thisSemester.put("CGPA",cgpa);
                 System.out.println("Putting CGPA into semester"+i+" "+cgpa);
                 scoreDetailsFromFile.put(Integer.toString(i),thisSemester);
             }
         }
+        totalDetails.put(roll_no,scoreDetailsFromFile);
         FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
-        DataHandling.writeIntoFile(fout,scoreDetailsFromFile);
+        DataHandling.writeIntoFile(fout,totalDetails);
         displaySgpaAndCgpa();
     }
 }

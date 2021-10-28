@@ -7,6 +7,7 @@ import org.json.simple.JSONValue;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -17,9 +18,9 @@ public class DataHandling {
         try {
             String jsonFileContents = jsonToString(fd);
             System.out.println(jsonFileContents);
-            JSONObject scoreDetailsFromFile = jsonToMap(jsonFileContents);
-            System.out.println(scoreDetailsFromFile);
-            return scoreDetailsFromFile;
+            JSONObject totalDetails = jsonToMap(jsonFileContents);
+            System.out.println(totalDetails);
+            return totalDetails;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,11 +55,11 @@ public class DataHandling {
         return "";
     }
 
-    public static String hashMapToJSON(HashMap scoreDetailsFromFile) {
-        System.out.println("Debug 1:" + scoreDetailsFromFile);
+    public static String hashMapToJSON(HashMap totalDetails) {
+        System.out.println("Debug 1:" + totalDetails);
         String jsonString = "";
         try {
-            jsonString = JSONValue.toJSONString(scoreDetailsFromFile);
+            jsonString = JSONValue.toJSONString(totalDetails);
             System.out.println(jsonString);
         } catch (Exception e) {
             System.out.println("ERROR WHILE converting to json");
@@ -66,11 +67,13 @@ public class DataHandling {
         return jsonString;
     }
 
-    public static void writeIntoFile(FileOutputStream fout,HashMap scoreDetailsFromFile) {
+    public static void writeIntoFile(FileOutputStream fout, HashMap totalDetails) {
         try {
 
 //            FileOutputStream fout = openFileOutput("scoreDetails.json", MODE_PRIVATE);
-            String jsonString=hashMapToJSON(scoreDetailsFromFile);
+
+            String jsonString=hashMapToJSON(totalDetails);
+
             byte b[] = jsonString.getBytes();//converting string into byte array
             fout.write(b);
             fout.close();
